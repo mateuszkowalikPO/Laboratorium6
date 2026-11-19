@@ -1,16 +1,20 @@
-# This is a sample Python script.
+import pandas as pd
+import matplotlib.pyplot as plt
+df = pd.read_csv("magazyny.csv", encoding="utf-8-sig")
+print(f"Kolumny: {df.columns.tolist()}")
+df = df[["magazyn", "miasto", "wojewodztwo", "produkty"]]
+print(df.head())
+print(f"Liczba magazynow: {(len(df["magazyn"]))}")
+posortowane = df.sort_values("produkty", ascending=False)
+print(posortowane[["magazyn", "miasto", "produkty"]].head())
+print(f"Laczna ilosc produktow: {df["produkty"].sum()}")
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+top10 = posortowane.head(10)
 
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+plt.barh(top10["magazyn"] ,top10["produkty"])
+plt.xlabel("Liczba produktów")
+plt.ylabel("Identyfikator magazynu")
+plt.title("Top 10 magazynów z największą liczbą produktów")
+plt.gca().invert_yaxis()
+plt.tight_layout()
+plt.show()
